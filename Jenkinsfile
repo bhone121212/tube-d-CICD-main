@@ -13,9 +13,9 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
         TRIVY_HOME = '/usr/bin'
-        REPO_URL = 'https://github.com/hlaingminpaing/youtube-clone-CICD.git' 
+        REPO_URL = 'https://github.com/bhone121212/tube-d-CICD-main.git' 
         REPO_BRANCH = 'main'
-        DOCKER_IMAGE_NAME = 'hlaingminpaing/youtube-clone'
+        DOCKER_IMAGE_NAME = 'bhonebhone/youtube-clone'
         SONAR_PROJECT_NAME = 'youtube-cicd'
         SONAR_PROJECT_KEY = 'youtube-cicd'
         DOCKER_CREDENTIALS_ID = 'dockerhub'
