@@ -11,7 +11,7 @@ pipeline {
     }
     
     environment {
-        / Override JAVA_HOME to point to the JDK 21 path (adjust if needed)
+        // Override JAVA_HOME to point to the JDK 21 path (adjust if needed)
         SCANNER_HOME = tool 'sonarqube-scanner'
         TRIVY_HOME = '/usr/bin'
         REPO_URL = 'https://github.com/bhone121212/tube-d-CICD-main.git' 
