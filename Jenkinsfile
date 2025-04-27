@@ -12,9 +12,12 @@ pipeline {
     
     environment {
         // Override JAVA_HOME to point to the JDK 21 path (adjust if needed)
+        // SCANNER_HOME = tool 'sonarqube-scanner'
+        // JAVA_HOME = tool 'jdk21'
+        // PATH = "${JAVA_HOME}/bin:${PATH}"  
         SCANNER_HOME = tool 'sonarqube-scanner'
         JAVA_HOME = tool 'jdk21'
-        PATH = "${JAVA_HOME}/bin:${PATH}"       
+        PATH = "${JAVA_HOME}/bin:${PATH}"     
         TRIVY_HOME = '/usr/bin'
         REPO_URL = 'https://github.com/bhone121212/tube-d-CICD-main.git' 
         REPO_BRANCH = 'main'
@@ -51,19 +54,30 @@ pipeline {
                 git branch: "${REPO_BRANCH}", url: "${REPO_URL}", credentialsId: 'github-credentials'
             }
         }
+        // stage('Sonarqube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv(credentialsId: "${SONAR_CREDENTIALS_ID}", installationName: "${SONAR_SERVER}") {
+        //             sh """
+        //             ${SCANNER_HOME}/sonar-scanner \
+        //                 -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+        //                 -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+        //             """
+        //         }
+        //     }
+        // }
+       
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(credentialsId: "${SONAR_CREDENTIALS_ID}", installationName: "${SONAR_SERVER}") {
                     sh """
                     ${SCANNER_HOME}/sonar-scanner \
                         -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                        -Dsonar.java.binaries=.
                     """
                 }
             }
         }
-       
-        
         stage('Quality Gate') {
             steps {
                 script {
