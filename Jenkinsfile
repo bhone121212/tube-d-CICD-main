@@ -51,17 +51,31 @@ pipeline {
                 git branch: "${REPO_BRANCH}", url: "${REPO_URL}", credentialsId: 'github-credentials'
             }
         }
+        // stage('Sonarqube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv(credentialsId: "${SONAR_CREDENTIALS_ID}", installationName: "${SONAR_SERVER}") {
+        //             sh """
+        //             ${SCANNER_HOME}/bin/sonar-scanner \
+        //                 -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+        //                 -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+        //             """
+        //         }
+        //     }
+        // }
         stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv(credentialsId: "${SONAR_CREDENTIALS_ID}", installationName: "${SONAR_SERVER}") {
                     sh """
-                    ${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY}
-                    """
-                }
-            }
+                    export PATH=${JAVA_HOME}/bin:$PATH
+                    ${SCANNER_HOME}/sonar-scanner \
+                    -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                    -Dsonar.java.binaries=.
+            """
         }
+    }
+}
+        
         stage('Quality Gate') {
             steps {
                 script {
